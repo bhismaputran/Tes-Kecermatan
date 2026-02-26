@@ -422,25 +422,10 @@ function Register({ onRegister, onSwitchToLogin }: { onRegister: (user: User) =>
 }
 
 // Pricing Component
-function Pricing({ user, onActivated }: { user: User, onActivated: (user: User) => void }) {
-  const [loading, setLoading] = useState(false);
-
-  const handleSimulatePayment = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/users/${user.id}/activate`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isActive: true }),
-      });
-      if (res.ok) {
-        onActivated({ ...user, isActive: true });
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
+function Pricing({ user }: { user: User }) {
+  const handleWhatsAppRedirect = () => {
+    const message = encodeURIComponent(`Halo saya mau daftar Casis Gacor\n\nDetail Akun:\nNama: ${user.name}\nEmail: ${user.email}`);
+    window.open(`https://wa.me/6285158380411?text=${message}`, '_blank');
   };
 
   return (
@@ -469,6 +454,12 @@ function Pricing({ user, onActivated }: { user: User, onActivated: (user: User) 
             </div>
           ))}
         </div>
+
+        <div className="bg-yellow-100 border-l-4 border-yellow-400 p-4 rounded-r-xl">
+          <p className="text-xs font-bold text-yellow-800">
+            *Setelah melakukan pembayaran, Admin akan mengaktifkan akun Anda secara manual. Silakan hubungi kami melalui WhatsApp.
+          </p>
+        </div>
       </div>
 
       <div className="bg-white border-4 border-[#141414] p-8 rounded-[40px] shadow-[16px_16px_0px_0px_rgba(20,20,20,1)] space-y-8 relative overflow-hidden">
@@ -487,15 +478,14 @@ function Pricing({ user, onActivated }: { user: User, onActivated: (user: User) 
 
         <div className="space-y-4">
           <button 
-            onClick={handleSimulatePayment}
-            disabled={loading}
-            className="w-full bg-[#141414] text-[#E4E3E0] py-5 rounded-2xl font-black text-lg hover:bg-black transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+            onClick={handleWhatsAppRedirect}
+            className="w-full bg-[#141414] text-[#E4E3E0] py-5 rounded-2xl font-black text-lg hover:bg-black transition-all flex items-center justify-center gap-3"
           >
             <CreditCard className="w-6 h-6" />
-            {loading ? 'MEMPROSES...' : 'AKTIFKAN SEKARANG'}
+            HUBUNGI ADMIN (WA)
           </button>
           <p className="text-[10px] text-center opacity-40 font-bold uppercase tracking-widest">
-            Pembayaran Aman & Instan
+            Konfirmasi Pembayaran via WhatsApp
           </p>
         </div>
 
@@ -799,7 +789,7 @@ export default function App() {
           ) : view === 'REGISTER' ? (
             <Register onRegister={(u) => { setUser(u); setView('PRICING'); }} onSwitchToLogin={() => setView('LOGIN')} />
           ) : view === 'PRICING' ? (
-            user && <Pricing user={user} onActivated={(u) => { setUser(u); setView('TEST'); }} />
+            user && <Pricing user={user} />
           ) : view === 'ADMIN' ? (
             <AdminDashboard onBack={() => setView('TEST')} />
           ) : (
