@@ -471,7 +471,7 @@ function Pricing({ user }: { user: User }) {
           <span className="text-xs font-black opacity-40 uppercase tracking-widest">Sekali Bayar</span>
           <div className="flex items-baseline gap-1">
             <span className="text-2xl font-bold">Rp</span>
-            <span className="text-6xl font-black font-serif italic">49</span>
+            <span className="text-6xl font-black font-serif italic">10</span>
             <span className="text-2xl font-bold">.000</span>
           </div>
         </div>
